@@ -7,23 +7,6 @@ const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url, true);
   const { pathname, query } = parsedUrl;
 
-  // Get today's date
-  let today = new Date();
-
-  // Calculate moon times for today
-  let moonTimes = moonTime({
-    year: today.getFullYear(),
-    month: today.getMonth() + 1, // JavaScript months are 0-based
-    day: today.getDate(),
-  });
-
-  // Create a new object with only the desired properties
-  let responseObj = {
-    year: moonTimes.year,
-    month: moonTimes.month,
-    day: moonTimes.day,
-  };
-
   // Set response headers
   res.writeHead(200, { "Content-Type": "application/json" });
 
@@ -31,6 +14,22 @@ const server = http.createServer((req, res) => {
   switch (req.method) {
     case "GET":
       if (pathname === "/cal") {
+        // Get today's date
+        let today = new Date();
+
+        // Calculate moon times for today
+        let moonTimes = moonTime({
+          year: today.getFullYear(),
+          month: today.getMonth() + 1, // JavaScript months are 0-based
+          day: today.getDate(),
+        });
+
+        // Create a new object with only the desired properties
+        let responseObj = {
+          year: moonTimes.year,
+          month: moonTimes.month,
+          day: moonTimes.day,
+        };
         // Respond with moonTimes if /cal is accessed
         res.end(JSON.stringify(responseObj));
         console.log("GET /cal request processed");
