@@ -1,14 +1,11 @@
 const http = require("http");
 const url = require("url");
 const mongoose = require("mongoose");
+let moonTime = require("moon-time");
 
 // Connect to MongoDB
 mongoose.connect(
-  "mongodb+srv://user01:user01@cluster0.ubsxqxz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
+  "mongodb+srv://user01:user01@cluster0.ubsxqxz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 );
 
 // Define schema and model
@@ -33,13 +30,23 @@ const server = http.createServer((req, res) => {
   switch (req.method) {
     case "GET":
       if (pathname === "/cal") {
-        // Your existing /cal logic
+        // Get today's date
         let today = new Date();
-        let responseObj = {
+
+        // Calculate moon times for today
+        let moonTimes = moonTime({
           year: today.getFullYear(),
-          month: today.getMonth() + 1,
+          month: today.getMonth() + 1, // JavaScript months are 0-based
           day: today.getDate(),
+        });
+
+        // Create a new object with only the desired properties
+        let responseObj = {
+          year: moonTimes.year,
+          month: moonTimes.month,
+          day: moonTimes.day,
         };
+        // Respond with moonTimes if /cal is accessed
         res.end(JSON.stringify(responseObj));
         console.log("GET /cal request processed");
       } else if (pathname === "/all") {
@@ -143,6 +150,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
