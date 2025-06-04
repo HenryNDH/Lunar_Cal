@@ -49,7 +49,7 @@ function handleSolarToLunarConversion(data, res) {
   const responseObj = {
     year: moonTimes.year,
     month: moonTimes.month,
-    day: moonTimes.day + 1, // Using moonTimes.day directly, assuming it's the intended lunar day
+    day: moonTimes.day, // Using moonTimes.day directly, assuming it's the intended lunar day
   };
 
   sendJsonResponse(res, 200, responseObj);
@@ -99,7 +99,7 @@ function handleLunarToSolarConversion(data, res) {
       foundSolarDate = {
         year: currentYear,
         month: currentMonth,
-        day: currentDay - 1, // Using currentDay directly, assuming it's the intended solar day
+        day: currentDay, // Using currentDay directly, assuming it's the intended solar day
       };
       break; // Found a match, exit loop
     }
